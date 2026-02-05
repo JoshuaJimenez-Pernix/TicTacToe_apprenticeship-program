@@ -1,6 +1,8 @@
 class Player:
 
     def __init__(self, symbol, name):
+        if symbol != "X" and symbol != "O":
+            raise ValueError("El símbolo debe ser 'X' o 'O'")
         self._symbol = symbol
         if name == "":
             self._name = "Jugador " + symbol
