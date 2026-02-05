@@ -1,5 +1,5 @@
-from src.board import Board
-from src.player import Player
+from src.Board import Board
+from src.Player import Player
 
 
 class Game:

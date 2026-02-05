@@ -34,8 +34,8 @@ def run_game():
     #Game
     game = Game(player1, player2)
     print(game.get_status())
-    game.next_turn()
-    print(game.get_status())
+    #game.next_turn()
+    #print(game.get_status())
 
 if __name__ == "__main__":
     run_game()
