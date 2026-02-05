@@ -1,5 +1,5 @@
 from src.Board import Board
-#from src.Game import Game
+from src.Game import Game
 from src.Player import Player
 
 def run_game():
@@ -32,8 +32,10 @@ def run_game():
     print(f"{player2.name} will use {player2.symbol}")
 
     #Game
-    #game = Game(board)
-    #game.start()
+    game = Game(player1, player2)
+    print(game.get_status())
+    game.next_turn()
+    print(game.get_status())
 
 if __name__ == "__main__":
     run_game()

@@ -10,6 +10,7 @@ class Board:
                 nueva_fila.append(self.EMPTY)
             self._grid.append(nueva_fila)
     
+    #Solo lectura
     @property
     def grid(self):
         copia = []
