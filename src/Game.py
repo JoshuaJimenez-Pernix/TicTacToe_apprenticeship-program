@@ -26,3 +26,13 @@ class Game:
     def get_status(self):
         jugador_actual = self.current_player
         return "Turno de " + jugador_actual.name + " (" + jugador_actual.symbol + ")"
+
+    def make_mark(self, coords):
+        fil = coords[0]
+        col = coords[1]
+        jugador_actual = self.current_player
+        possible = self._board.mark(fil, col, jugador_actual.symbol)
+        if possible:
+            self.next_turn()
+            return True
+        return False

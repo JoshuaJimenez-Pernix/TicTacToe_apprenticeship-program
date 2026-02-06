@@ -18,6 +18,20 @@ class Board:
             copia.append(fila[:])
         return copia
 
+    def mark(self, fil, col, symbol):
+        if self.valid_move(fil, col):
+            self._grid[fil][col] = symbol
+            return True
+        return False
+
+    def valid_move(self, fil, col):
+        if fil < 0 or fil >= self.SIZE:
+            return False
+        if col < 0 or col >= self.SIZE:
+            return False
+        if self._grid[fil][col] != self.EMPTY:
+            return False
+        return True
     
     def __str__(self):
         lineas = []
