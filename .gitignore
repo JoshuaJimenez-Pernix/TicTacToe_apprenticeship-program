@@ -1,0 +1,9 @@
+# Python bytecode and caches
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.pytest_cache
+
+# Optional: Node (si no usas el proyecto como Node)
+# node_modules/
