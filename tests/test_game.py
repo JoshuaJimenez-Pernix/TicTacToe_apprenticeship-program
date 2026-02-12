@@ -242,3 +242,84 @@ class TestGameReset:
         
         estado = game.boardCheck()
         assert estado["status"] == "draw"
+
+
+class TestGameScore:
+    """Tests for game score tracking."""
+
+    def test_initial_score_is_zero(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test that initial score is zero for all players."""
+        score = game.score
+        assert score[players[0].symbol] == 0
+        assert score[players[1].symbol] == 0
+        assert score["draw"] == 0
+
+    def test_update_score_x_wins(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test score update when X wins."""
+        game.make_mark((0, 0))  # X
+        game.make_mark((1, 0))  # O
+        game.make_mark((0, 1))  # X
+        game.make_mark((1, 1))  # O
+        game.make_mark((0, 2))  # X wins!
+        
+        game.update_score(players[0].symbol)
+        
+        score = game.score
+        assert score[players[0].symbol] == 1
+        assert score[players[1].symbol] == 0
+        assert score["draw"] == 0
+
+    def test_update_score_o_wins(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test score update when O wins."""
+        game.make_mark((0, 0))  # X
+        game.make_mark((1, 0))  # O
+        game.make_mark((0, 1))  # X
+        game.make_mark((1, 1))  # O
+        game.make_mark((2, 0))  # X
+        game.make_mark((1, 2))  # O wins!
+        
+        game.update_score(players[1].symbol)
+        
+        score = game.score
+        assert score[players[0].symbol] == 0
+        assert score[players[1].symbol] == 1
+        assert score["draw"] == 0
+
+    def test_update_score_draw(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test score update when game is a draw."""
+        game.make_mark((0, 0))  # X
+        game.make_mark((0, 1))  # O
+        game.make_mark((0, 2))  # X
+        game.make_mark((1, 1))  # O
+        game.make_mark((1, 0))  # X
+        game.make_mark((1, 2))  # O
+        game.make_mark((2, 1))  # X
+        game.make_mark((2, 0))  # O
+        game.make_mark((2, 2))  # X - draw!
+        
+        game.update_score("draw")
+        
+        score = game.score
+        assert score[players[0].symbol] == 0
+        assert score[players[1].symbol] == 0
+        assert score["draw"] == 1
+
+    def test_reset_score(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test that reset_score clears the score."""
+        game.update_score(players[0].symbol)
+        game.update_score("draw")
+        
+        game.reset_score()
+        
+        score = game.score
+        assert score[players[0].symbol] == 0
+        assert score[players[1].symbol] == 0
+        assert score["draw"] == 0
+
+    def test_score_persists_after_reset(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test that reset() does NOT reset the score."""
+        game.update_score(players[0].symbol)
+        game.reset()
+        
+        score = game.score
+        assert score[players[0].symbol] == 1
