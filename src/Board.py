@@ -35,12 +35,16 @@ class Board:
     
     def __str__(self):
         lineas = []
+        # Encabezado de columnas
+        lineas.append("    1   2   3")
+        lineas.append("  +---+---+---+")
         for i in range(self.SIZE):
             fila = self._grid[i]
-            linea = " " + " | ".join(fila) + " "
+            linea = str(i + 1) + " | " + " | ".join(fila) + " |"
             lineas.append(linea)
             if i < self.SIZE - 1:
-                lineas.append("---+---+---")
+                lineas.append("  +---+---+---+")
+        lineas.append("  +---+---+---+")
         return "\n".join(lineas)
 
     def search(self):
