@@ -51,6 +51,17 @@ class Game:
     def stopGame(self):
         self.running = False
 
+    def reset(self):
+        """
+        Reinicia el juego a su estado inicial:
+        - Limpia el tablero
+        - Reinicia al primer jugador
+        - Establece el estado del juego como no terminado
+        """
+        self._board.reset()
+        self._current_index = 0
+        self.running = False
+
     def boardCheck(self):
         """
         Devuelve el estado actual de la partida desde la perspectiva del juego.
