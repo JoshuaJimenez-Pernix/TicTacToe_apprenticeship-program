@@ -5,27 +5,24 @@ from src.Player import Player
 def run_game():
     print("\n=== TicTacToe ===\n")
     print("Bienvenido to TicTacToe Game")
-    #Board
-    board = Board()
-
     #Type
     type = 0
     """ Future request 
-    type = input("Select the type of game (1: Human vs Human, 2: Human vs Computer): ")
-    while symbolP1 not in ["X", "O"]:
-        symbolP1 = input("Invalid symbol. Please select X or O:").strip().upper()
+    type = input("> Select the type of game (1: Human vs Human, 2: Human vs Computer): ")
+    while type not in ["1", "0"]:
+        type = input("Invalid selection (1: Human vs Human, 2: Human vs Computer):").strip().upper()
     """
     #Players
     #1st Player
-    nameP1 = input("Write your name: ")
-    symbolP1 = input("Select your simbol(X|O):").strip().upper()
+    nameP1 = input("> Write your name: ")
+    symbolP1 = input("> Select your simbol(X|O):").strip().upper()
     while symbolP1 not in ["X", "O"]:
         symbolP1 = input("Invalid symbol. Please select X or O:").strip().upper()
     
     #2nd player
     symbolP2 = "O" if symbolP1 == "X" else "X"
     if type == 1:
-        nameP2 = input("Write second player name: ")
+        nameP2 = input("> Write second player name: ")
     else:
         nameP2 = "Computer (AI)"
     
@@ -34,27 +31,35 @@ def run_game():
     print(f"{player1.name} will use {player1.symbol}")
     print(f"{player2.name} will use {player2.symbol}")
 
-    #Game
+    # Game
     game = Game(player1, player2)
 
     while True:
         print(game.get_status())
         print(game.board)
-        coordinates = input("Ingrese las coordinadas que quiere marcar : ").strip()
+        coordinates = input("> Ingrese las coordenadas que quiere marcar: ").strip()
         coordinates = parse_coordnates(coordinates)
-        if coordinates == None:
+        if coordinates is None:
             print(
                 "Coordenadas inválidas. Usa dos números del 1 al 3, "
                 "por ejemplo: 1 1 o 2 3.\n"
             )
             continue
-        valid = game.make_mark(coordinates)
-        if not valid:
-            print(" xxx Movimiento invalido xxx ")
 
+        if game.make_mark(coordinates):
+            estado = game.boardCheck()
+            if estado["status"] == "win":
+                print(game.board)
+                ganador = estado["winner"]
+                print(f"¡{ganador.name} ha ganado la partida con '{ganador.symbol}'!")
+                break
+            elif estado["status"] == "draw":
+                print(game.board)
+                print("La partida ha terminado en empate.")
+                break
+        else:
+            print(" xxx Movimiento inválido xxx ")
 
-
-    #game.next_turn()
     #print(game.get_status())
 
 def parse_coordnates(input):
