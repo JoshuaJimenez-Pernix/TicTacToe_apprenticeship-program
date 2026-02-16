@@ -175,3 +175,70 @@ class TestGameDrawDetection:
         assert game.isOver() is True
         estado = game.boardCheck()
         assert estado["status"] == "win"
+
+
+class TestGameReset:
+    """Tests for game reset functionality."""
+
+    def test_reset_clears_board(self, game: Game) -> None:
+        """Test that reset() clears the board."""
+        # Make some marks
+        game.make_mark((0, 0))
+        game.make_mark((1, 1))
+        game.make_mark((2, 2))
+        
+        # Reset the game
+        game.reset()
+        
+        # Verify board is empty
+        for fila in range(Board.SIZE):
+            for columna in range(Board.SIZE):
+                assert game.board.grid[fila][columna] == Board.EMPTY
+
+    def test_reset_returns_to_first_player(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test that reset() returns to the first player (X)."""
+        # Make some moves to change turn
+        game.make_mark((0, 0))  # X plays
+        game.make_mark((1, 1))  # O plays
+        
+        # Verify current player is O
+        assert game.current_player.symbol == "X"
+        
+        # Reset the game
+        game.reset()
+        
+        # Verify current player is X again
+        assert game.current_player.symbol == "X"
+        assert game.current_player is players[0]
+
+    def test_reset_allows_playing_again(self, game: Game, players: tuple[Player, Player]) -> None:
+        """Test that after reset, a new game can be played."""
+        # Complete a game
+        game.make_mark((0, 0))  # X
+        game.make_mark((1, 0))  # O
+        game.make_mark((0, 1))  # X
+        game.make_mark((1, 1))  # O
+        game.make_mark((0, 2))  # X - X wins!
+        
+        assert game.isOver() is True
+        
+        # Reset and play again
+        game.reset()
+        
+        assert game.isOver() is False
+        # Make different moves to create a draw:
+        # X | O | X
+        # X | O | O
+        # O | X | X
+        game.make_mark((0, 0))  # X
+        game.make_mark((0, 1))  # O
+        game.make_mark((0, 2))  # X
+        game.make_mark((1, 1))  # O
+        game.make_mark((1, 0))  # X
+        game.make_mark((1, 2))  # O
+        game.make_mark((2, 1))  # X
+        game.make_mark((2, 0))  # O
+        game.make_mark((2, 2))  # X - draw!
+        
+        estado = game.boardCheck()
+        assert estado["status"] == "draw"

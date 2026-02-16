@@ -120,3 +120,11 @@ class Board:
                 if celda == self.EMPTY:
                     return False
         return True
+
+    def reset(self):
+        """
+        Reinicia el tablero a su estado inicial (vacío).
+        """
+        for fila in range(self.SIZE):
+            for columna in range(self.SIZE):
+                self._grid[fila][columna] = self.EMPTY
