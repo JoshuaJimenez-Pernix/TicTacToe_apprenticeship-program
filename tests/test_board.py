@@ -204,3 +204,47 @@ class TestBoardWinnerDetection:
         assert result["winner_symbol"] is None
 
 
+class TestBoardReset:
+    """Tests for board reset functionality."""
+
+    def test_reset_clears_the_board(self) -> None:
+        """Test that reset() clears all marks from the board."""
+        board = Board()
+        # Make some marks
+        board.mark(0, 0, "X")
+        board.mark(1, 1, "O")
+        board.mark(2, 2, "X")
+        
+        # Verify marks are placed
+        assert board.grid[0][0] == "X"
+        assert board.grid[1][1] == "O"
+        assert board.grid[2][2] == "X"
+        
+        # Reset the board
+        board.reset()
+        
+        # Verify board is empty
+        for fila in range(Board.SIZE):
+            for columna in range(Board.SIZE):
+                assert board.grid[fila][columna] == Board.EMPTY
+
+    def test_reset_returns_ongoing_status(self) -> None:
+        """Test that after reset, search() returns 'ongoing' status."""
+        board = Board()
+        # Make a winning move
+        board.mark(0, 0, "X")
+        board.mark(0, 1, "X")
+        board.mark(0, 2, "X")
+        
+        # Verify there's a winner
+        result = board.search()
+        assert result["status"] == "win"
+        
+        # Reset the board
+        board.reset()
+        
+        # Verify status is now ongoing
+        result = board.search()
+        assert result["status"] == "ongoing"
+        assert result["winner_symbol"] is None
+

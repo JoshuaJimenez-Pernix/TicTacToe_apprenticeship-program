@@ -9,6 +9,7 @@ class Game:
         self._players = [player1, player2]
         self._current_index = 0
         self.running = False
+        self._score = {player1.symbol: 0, player2.symbol: 0, "draw": 0}
     
 
     @property
@@ -18,6 +19,15 @@ class Game:
     @property
     def current_player(self):
         return self._players[self._current_index]
+    
+    @property
+    def score(self):
+        """Returns the current score."""
+        return self._copy_score()
+    
+    def _copy_score(self):
+        """Returns a copy of the score dictionary."""
+        return self._score.copy()
     
     def next_turn(self):
         self._current_index = self._current_index + 1
@@ -50,6 +60,32 @@ class Game:
     
     def stopGame(self):
         self.running = False
+
+    def reset(self):
+        """
+        Reinicia el juego a su estado inicial:
+        - Limpia el tablero
+        - Reinicia al primer jugador
+        - Establece el estado del juego como no terminado
+        """
+        self._board.reset()
+        self._current_index = 0
+        self.running = False
+
+    def reset_score(self):
+        """Reinicia el marcador a cero."""
+        for key in self._score:
+            self._score[key] = 0
+
+    def update_score(self, result: str):
+        """
+        Actualiza el marcador según el resultado del juego.
+        
+        Args:
+            result: "X", "O" para victoria, o "draw" para empate
+        """
+        if result in self._score:
+            self._score[result] += 1
 
     def boardCheck(self):
         """
